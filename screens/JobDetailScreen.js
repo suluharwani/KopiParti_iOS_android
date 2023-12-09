@@ -151,27 +151,29 @@ const JobDetailScreen = ({ route }) => {
           <Text className="text-lg mb-2 text-black">{jobDetail.job_desc}</Text>
           </ScrollView>
           <View style={{ padding: 16, backgroundColor: 'white' }}>
-        <TouchableOpacity 
-          style={{ 
-            height: 50, 
-            width: '100%', // Lebar penuh
-            backgroundColor: '#FFD700', 
-            borderRadius: 8, 
-            justifyContent: 'center', 
-            alignItems: 'center'
-          }}
-          onPress={lamarPekerjaan}
-        >
-          <Text 
-            style={{
-              fontSize: 18,
-              fontWeight: 'bold',
-              color: '#333333'
-            }}
-          >
-            Lamar Pekerjaan
-          </Text>
-        </TouchableOpacity>
+          <TouchableOpacity 
+  style={{
+    height: 50, 
+    width: '100%', 
+    backgroundColor: hasApplied ? '#D3D3D3' : '#FFD700', // Ganti warna sesuai kondisi hasApplied
+    borderRadius: 8, 
+    justifyContent: 'center', 
+    alignItems: 'center'
+  }}
+  onPress={lamarPekerjaan}
+  disabled={hasApplied} // Disable tombol jika sudah melamar
+>
+  <Text 
+    style={{
+      fontSize: 18,
+      fontWeight: 'bold',
+      color: hasApplied ? '#A9A9A9' : '#333333' // Ganti warna teks sesuai kondisi hasApplied
+    }}
+  >
+    {hasApplied ? 'Sudah Melamar' : 'Lamar Pekerjaan'} {/* Ganti teks sesuai kondisi hasApplied */}
+  </Text>
+</TouchableOpacity>
+
       </View>
         </>
         

@@ -104,7 +104,7 @@ const HomeScreen = () => {
         <TouchableOpacity
           onPress={() => navigation.navigate('JobDetail', { id: item.id })} // Navigate to JobDetail with id as parameter
         >
-          <View style={styles.card}> 
+          <View style={[styles.card]}> 
                 <Text style={styles.cardHeading}> 
                 {item.job}
                 </Text> 
@@ -130,53 +130,58 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({ 
   container: { 
-      flex: 1, 
-      justifyContent: "center", 
-      alignItems: "center", 
-      backgroundColor: "#f0f0f0", 
-      padding: 20, 
+    flex: 1, 
+    justifyContent: "center", 
+    alignItems: "center", 
+    backgroundColor: "#f0f0f0", 
+    padding: 20, 
   }, 
   button: { 
-      backgroundColor: "#007BFF", 
-      padding: 15, 
-      // Apply borderRadius to the button 
-      borderTopLeftRadius: 55, 
-      borderTopRightRadius: 25, 
-      borderBottomLeftRadius: 25, 
-      borderBottomRightRadius: 55, 
-      justifyContent: "center", 
-      alignItems: "center", 
-      width: "60%", 
+    backgroundColor: "#007BFF", 
+    padding: 15, 
+    borderRadius: 30, // Gabungkan borderRadius
+    justifyContent: "center", 
+    alignItems: "center", 
+    width: "60%", 
+    shadowColor: '#171717',
+  shadowOffset: { width: -2, height: 4 },
+  shadowOpacity: 0.2,
+  shadowRadius: 3,
+  elevation: 3, // Gabungkan shadow properties
   }, 
   buttonText: { 
-      color: "white", 
-      fontSize: 18, 
+    color: "white", 
+    fontSize: 18, 
   }, 
   card: { 
-      backgroundColor: "ffff00", 
-      // Apply borderRadius to the Card 
-      borderRadius: 10, 
-      marginTop: 20, 
-      padding: 15, 
-      width: "90%", 
-      shadowColor: "rgba(0, 0, 0, 0.1)", 
-      shadowOffset: { 
-          width: 0, 
-          height: 2, 
-      }, 
-      shadowOpacity: 1, 
-      shadowRadius: 4, 
-      elevation: 3, 
+    backgroundColor: "#c1d3e6", 
+    borderRadius: 10, 
+    marginTop: 20, 
+    padding: 15, 
+    width: "90%", 
+    shadowColor: '#171717',
+  shadowOffset: { width: -2, height: 4 },
+  shadowOpacity: 0.2,
+  shadowRadius: 3,
+  elevation: 3, // Gabungkan shadow properties
   }, 
   cardHeading: { 
-      color: "#000",
-      fontSize: 24, 
-      fontWeight: "bold", 
-      marginBottom: 10, 
+    color: "#000",
+    fontSize: 24, 
+    fontWeight: "bold", 
+    marginBottom: 10, 
   }, 
   cardText: { 
-      fontSize: 16, 
-      color: "#000"
+    fontSize: 16, 
+    color: "#000"
   }, 
+  shadowProp: {
+    shadowColor: '#171717',
+    shadowOffset: {width: -2, height: 4},
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3, // Tambahkan elevation untuk platform Android
+  },
 });
+
 export default HomeScreen;
