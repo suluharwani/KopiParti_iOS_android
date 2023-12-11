@@ -1,10 +1,11 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'; // Import Alert from react-native
+import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { GetJobPage } from '../src/api/JobApi';
 import { themeColors } from '../theme';
 import Header from './header';
+
 const HomeScreen = () => {
   const [Usertoken, setUserToken] = useState(null);
   const title = "Cari kerja";
@@ -13,68 +14,84 @@ const HomeScreen = () => {
   const [nomorPage, setPage] = useState(1);
   const [batasPage, setBatasPage] = useState(1);
   const [jobPostings, setJobPostings] = useState([]);
-  
-  // const jobCategories = ['Full-Time', 'Part-Time', 'Kontrak'];
+  const [searchTextBuffer, setSearchTextBuffer] = useState('');
+
   const navigation = useNavigation();
+
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
   };
-  
+
   const tambahData = async () => {
     try {
-      let params = {
-        page: nomorPage,
-      };
-  
+      let params = { page: nomorPage };
+
       if (searchText) {
-        params.s = searchText; // Tambahkan parameter pencarian jika searchText tidak kosong
+        params.s = searchText;
       }
-  
+
       const result = await GetJobPage(params);
-      console.log(result);
-  
+      console.log(result.data)
+
+      console.log("panjang="+result.data.length)
+      console.log(result.pagination)
+      console.log(searchText)
+      console.log("total="+result.pagination.totalElements)
       if (result && result.pagination && result.pagination.totalElements > 0) {
-        if (parseInt(result.pagination.totalElements) - nomorPage * 7 > 0) {
+        if (parseInt(result.pagination.totalElements) - nomorPage * 7 > 0 || result.data.length==7 ) {
           setPage(nomorPage + 1);
-          setJobPostings(prevPostings => {
-            const newPostings = result.data.filter(newItem => 
-              !prevPostings.some(prevItem => prevItem.id === newItem.id)
+          setJobPostings((prevPostings) => {
+            const newPostings = result.data.filter(
+              (newItem) => !prevPostings.some((prevItem) => prevItem.id === newItem.id)
             );
             return [...prevPostings, ...newPostings];
           });
-        }else if(result.pagination.totalElements <= 7){
-          setJobPostings(result.data)
+        } else if ((parseInt( result.data.length)<7) )  {
+          setJobPostings(result.data);
         }
-         else {
+        else{
           console.log('Data habis');
         }
       } else {
         Alert.alert('Tidak ada data');
       }
     } catch (error) {
-      Alert.alert('Login Failed', error.response.data.message);
+      Alert.alert('error');
     }
   };
+
   const onSearchTextChange = (text) => {
-    setSearchText(text);
-    setPage(1); // Reset halaman ke 1 setiap kali pencarian berubah
-    setJobPostings([]); // Mengosongkan data saat pencarian berubah
-    tambahData(); // Panggil tambahData untuk memuat data baru berdasarkan pencarian baru
+    setSearchTextBuffer(text);
   };
+
   const resetData = () => {
+    setSearchText('');
     setPage(1);
     setJobPostings([]);
     tambahData();
-    setSearchText('')
   };
+
   useEffect(() => {
-    setJobPostings([])
-    tambahData(); // Panggil tambahData untuk memuat data pertama kali
+    const delayDebounceFn = setTimeout(() => {
+      setSearchText(searchTextBuffer);
+      setPage(1);
+      setJobPostings([]);
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [searchTextBuffer]);
+
+  useEffect(() => {
+    tambahData();
+  }, [searchText]);
+
+  useEffect(() => {
+    setJobPostings([]);
+    tambahData();
     AsyncStorage.getItem('token').then((token) => {
       setUserToken(token);
     });
-  }, []); // Tambahkan dependensi yang sesuai jika diperlukan
-  
+  }, []);
   return (
     <View className="flex-1 bg-white" style={{ backgroundColor: themeColors.bg }}>
       <Header judul={title} />
@@ -86,7 +103,7 @@ const HomeScreen = () => {
               className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3"
               placeholder="Cari lowongan..."
               value={searchText}
-              onChangeText={onSearchTextChange}
+              onChangeText={setSearchText}
             />
             <TouchableOpacity
               onPress={resetData}
@@ -154,7 +171,7 @@ const styles = StyleSheet.create({
     fontSize: 18, 
   }, 
   card: { 
-    backgroundColor: "#c1d3e6", 
+    backgroundColor: "#d1ddeb", 
     borderRadius: 10, 
     marginTop: 20, 
     padding: 15, 
