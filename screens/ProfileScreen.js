@@ -8,6 +8,9 @@ import { getJob } from '../src/api/CompanyApi';
 import { Dilamar } from '../src/api/JobApi';
 import { themeColors } from '../theme';
 import Header from './header';
+import moment from 'moment'
+import 'moment/locale/id'
+
 export default function ProfileScreen() {
   const navigation = useNavigation();
   const [Usertoken, setUserToken] = useState(null);
@@ -40,6 +43,7 @@ export default function ProfileScreen() {
           id_user :get_id_user,
         }).then((result) => {
           if(result.data){
+            console.log(result.data)
             setJobApplications(JSON.parse(result.data));
           }
           
@@ -176,7 +180,36 @@ export default function ProfileScreen() {
       navigation.navigate('JobDetailCompany', { data: applicant })
     };
   
-    
+    const getStatusColor = (status) => {
+      switch (status) {
+        case '1':
+          return '#FFFFFF'; // Warna hijau untuk status 1
+        case '2':
+          return '#FFFF00'; // Warna kuning untuk status 2
+        case '3':
+          return '#00FF00'; // Warna biru untuk status 3
+          case '4':
+            return '#FF0000'; // Warna biru untuk status 3
+        default:
+          return '#FFFFFF'; // Warna putih untuk status lainnya atau tidak valid
+      }
+    };
+    const getStatus = (status) => {
+        switch (status) {
+          case '1':
+            return 'Lamaran Masuk'; // Warna hijau untuk status 1
+          case '2':
+            return 'Lamaran Diproses'; // Warna kuning untuk status 2
+          case '3':
+            return 'Proses Interview'; // Warna biru untuk status 3
+            case '4':
+              return 'Tidak Sesuai'; // Warna biru untuk status 3
+          default:
+            return 'Belum ada Status'; // Warna putih untuk status lainnya atau tidak valid
+        }
+      };
+    // let bg = getStatusColor(item.status_lamaran);
+    // let status = getStatus(item.status_lamaran);
     const level = UserData ? JSON.parse(UserData).level : 1;
     
     if (level == 2 || level == "2") {
@@ -200,8 +233,8 @@ export default function ProfileScreen() {
                       }}>
                       <Text>No: {index + 1}</Text>
                       <Text>Job: {item.job}</Text>
-                      <Text>Tanggal: {item.start}</Text>
-                      <Text>Selesai: {item.due}</Text>
+                      <Text style={{ fontSize: 10, color: "#000" }}>Tanggal: {moment(item.start).format('LL')} </Text>
+                      <Text style={{ fontSize: 10, color: "#000" }}>Selesai: {moment(item.due).format('LL')} </Text>
                       {/* Other applicant details... */}
                       <Text style={{ color: 'green' }}>Tap to View</Text>
                       <Text style={{ color: 'red' }}>Long Tap to delete</Text>
@@ -248,12 +281,21 @@ export default function ProfileScreen() {
     key={application.id} // Add a unique key prop here
     onPress={() => navigation.navigate('JobDetail', { id: application.id_job })} // Navigate to JobDetail with id as parameter
   >
-    <View style={{ marginBottom: 20 }}>
+    <View style={{ marginBottom: 10,
+          padding: 10,
+          borderWidth: 1,
+          borderRadius: 8,
+         backgroundColor: getStatusColor(application.status_lamaran)}}>
       <Text style={{ fontSize: 18, fontWeight: 'bold', color: "#000" }}>
         Lowongan: {application.job}
       </Text>
       <Text style={{ fontSize: 16, color: "#000" }}>
-        Tanggal: {application.created_at}
+    {moment(application.created_at).format('LL')} 
+
+      </Text>
+      <Text style={{ fontSize: 16, color: "#000" }}>
+    {getStatus(application.status_lamaran)} 
+    
       </Text>
     </View>
   </TouchableOpacity>

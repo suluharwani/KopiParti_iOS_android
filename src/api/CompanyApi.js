@@ -26,6 +26,7 @@ const getProvinces = async data=>{
     }
 }
 const getCities = async data=>{
+    
     try {
         
         const result = await ApiManager(`/cities/${data}`,{
@@ -33,11 +34,14 @@ const getCities = async data=>{
             headers:{
                 'Content-Type':"application/json",
             },
-            data:data
+            data:undefined
         })
         return result.data
     } catch (error) {
-        return error.response.data
+        console.log(error)
+        console.log(ApiManager(`/cities/${data}`))
+        
+        return 0
     }
 }
 const postJob = async data=>{
@@ -65,7 +69,7 @@ const getJob = async data=>{
                 'Content-Type':"application/json",
                 'Authorization': `Bearer ${data.token}`
             },
-            data:data
+            data:undefined
         })
         return result.data
     } catch (error) {
@@ -101,7 +105,7 @@ const GetApplicant = async data=>{
                 'Content-Type':"application/json",
                 'Authorization': `Bearer ${token}`
             },
-            data:data
+            data:undefined
             
        
         })
@@ -122,12 +126,13 @@ const GetApplicantDet = async data=>{
                 'Content-Type':"application/json",
                 'Authorization': `Bearer ${token}`
             },
-            data:data
+            data:undefined
             
        
         })
         return result.data
     } catch (error) {
+        console.log(error)
         return error.response.data
     }
 }

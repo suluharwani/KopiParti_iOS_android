@@ -5,6 +5,8 @@ import { Alert, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View } 
 import { GetJobPage } from '../src/api/JobApi';
 import { themeColors } from '../theme';
 import Header from './header';
+import moment from 'moment'
+import 'moment/locale/id'
 
 const HomeScreen = () => {
   const [Usertoken, setUserToken] = useState(null);
@@ -31,6 +33,8 @@ const HomeScreen = () => {
       }
 
       const result = await GetJobPage(params);
+
+      console.log(params)
       console.log(result.data)
 
       console.log("panjang="+result.data.length)
@@ -47,7 +51,15 @@ const HomeScreen = () => {
             return [...prevPostings, ...newPostings];
           });
         } else if ((parseInt( result.data.length)<7) )  {
-          setJobPostings(result.data);
+          // setJobPostings((prevPostings) => {
+          //   setPage(1)
+          //   const newPostings = result.data.filter(
+          //     (newItem) => !prevPostings.some((prevItem) => prevItem.id === newItem.id)
+          //   );
+          //   const updatedPostings = [...prevPostings, ...newPostings];
+          //   return updatedPostings;
+          // });
+          setJobPostings(result.data)
         }
         else{
           console.log('Data habis');
@@ -68,7 +80,9 @@ const HomeScreen = () => {
     setSearchText('');
     setPage(1);
     setJobPostings([]);
+    setSearchTextBuffer('')
     tambahData();
+    
   };
 
   useEffect(() => {
@@ -125,6 +139,7 @@ const HomeScreen = () => {
                 <Text style={styles.cardHeading}> 
                 {item.job}
                 </Text> 
+                <Text style={{ fontSize: 10, color: "#000" }}>{moment(item.start).format('LLLL')} </Text>
                 <Text style={{ fontSize: 16, color: "#000" }}>
               {item.minimum_qualification}
             </Text>

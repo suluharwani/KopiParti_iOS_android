@@ -124,10 +124,9 @@ export default function DataPemberiKerja({ route }) {
     const fetchData = async () => {
       try {
         // Fetch company data
-        const companyData = await GetCompanyData({ id: id, token: Usertoken });
-        if (companyData.success === true) {
-          // Handle company data...
-        }
+        // const companyData = await GetCompanyData({ id: id, token: Usertoken });
+        // if (companyData.success === true) {
+        // }
   
         // Fetch job data
         setApplicantListLoading(true);
@@ -135,8 +134,10 @@ export default function DataPemberiKerja({ route }) {
         if (applicants.success && applicants.data != null) {
           setApplicantList(JSON.parse(applicants.data));
         }
-      } catch (error) {
-        console.error('Error fetching data:', error);
+        console.log(applicants.data);
+
+      } catch (e) {
+        console.log('Error fetching data applicant');
       } finally {
         // Update state to stop loading
         setApplicantListLoading(false);
@@ -157,6 +158,7 @@ export default function DataPemberiKerja({ route }) {
     // Example API response: [{ id: '1', name: 'City 1' }, { id: '2', name: 'City 2' }]
     const response = await getCities(provinceId);
     const data = JSON.parse(response.data)
+    
     setCities(data);
   };
   
@@ -247,12 +249,14 @@ export default function DataPemberiKerja({ route }) {
         return (
           <View>
                 <View style={{padding: 16}}>
+                  <View>
                   <Text  className = "color-black">Provinsi</Text>
                     <Picker
-                      itemStyle={{ backgroundColor: "grey", color: "blue", fontFamily:"Ebrima", fontSize:17 }}
+                      itemStyle={{ fontFamily:"Ebrima", fontSize:17 }}
                       selectedValue={selectedProvince}
                       onValueChange={(itemValue) => handleProvinceChange(itemValue)}
-                      style={{ height: 50, width: 200 }}>
+                       style={{ height: 150 }}
+                      >
                       <Picker.Item label="Select Provinsi" value=""  />
                       {provinces.map((province) => (
                         <Picker.Item key={province.prov_id} label={province.prov_name} value={province.prov_id} />
@@ -260,15 +264,18 @@ export default function DataPemberiKerja({ route }) {
                     </Picker>
                     <Text className = "color-black">Kota</Text>
                     <Picker
-                      itemStyle={{ backgroundColor: "grey", color: "blue", fontFamily:"Ebrima", fontSize:17 }}
+                      itemStyle={{  fontFamily:"Ebrima", fontSize:17 }}
                       selectedValue={selectedCity}
                       onValueChange={(itemValue) => setSelectedCity(itemValue)}
-                      style={{ height: 50, width: 200 }}>
+                      // style={{ height: 100, width: 200 }}
+                      >
                       <Picker.Item label="Select Kota" value="" />
                       {cities.map((city) => (
                         <Picker.Item key={city.city_id} label={city.city_name} value={city.city_id} />
                       ))}
                     </Picker>
+                    </View>
+
                   <Text className = "color-black">Alamat</Text>
                   <TextInput className="p-4 bg-gray-100 text-gray-700 rounded-2xl mb-3" placeholder="Alamat" value={address} onChangeText={setAddress} />
                   <Text className = "color-black">Kode Pos</Text>

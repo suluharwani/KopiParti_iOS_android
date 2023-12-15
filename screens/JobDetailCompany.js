@@ -34,7 +34,7 @@ export default function JobDetailCompany({ route }) {
     try {
       const response = await GetApplicant({id:jobDetail.id });
       const data = JSON.parse(response.data)
-      
+      console.log(data)
       setApplicants(data);
       setLoading(false);
     } catch (error) {
