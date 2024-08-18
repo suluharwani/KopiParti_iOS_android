@@ -8,7 +8,7 @@ const environments = {
       DEBUG_MODE: true,
     },
     production: {
-      API_URL: 'https://api.cendratama.co.id/api',
+      API_URL: 'https://api.habumishop.com/api',
       DEBUG_MODE: false,
     },
   };

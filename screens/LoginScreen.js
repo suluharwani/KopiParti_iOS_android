@@ -21,7 +21,31 @@ export default function LoginScreen() {
     }
   
   }
-  
+  const onLoginDemo = async () => {
+    try {
+      userLogin({
+        email:"demo@mail.com",
+        password:"demo"
+      }).then((result)=>{
+        console.log(result.data)
+
+        if (result.data.success == true) {
+         
+         saveStorage('token',result.data.token);
+        
+        saveStorage('data', JSON.stringify(result.data.data)).then(navigation.navigate('Home'))
+        
+        }
+      
+        
+      })
+
+    
+      
+    } catch (error) {
+      Alert.alert('Login Failed', error.response.data.message);
+    }
+  };
   const onLogin = async () => {
     try {
       userLogin({
@@ -94,6 +118,14 @@ export default function LoginScreen() {
             <TouchableOpacity className="flex items-end">
               <Text className="text-gray-700 mb-5">Forgot Password?</Text>
             </TouchableOpacity>
+            {/* <TouchableOpacity 
+              className="py-3 bg-yellow-400 rounded-xl" onPress={()=> onLoginDemo()}>
+                <Text 
+                    className="text-xl font-bold text-center text-gray-700"
+                >
+                        Login Demo
+                </Text>
+             </TouchableOpacity> */}
             <TouchableOpacity 
               className="py-3 bg-yellow-400 rounded-xl" onPress={()=> onLogin()}>
                 <Text 
